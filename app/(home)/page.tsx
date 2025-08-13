@@ -6,7 +6,7 @@
    import { Card } from '@/components/ui/card'
    import { CardContent } from '@/components/ui/card'
    import ProductSlider from '@/components/shared/product/product-slider'
-   
+
    
 
 
@@ -64,6 +64,7 @@
      ]
 
      const todaysDeals = await getProductsByTag({tag: 'todays-deal'})
+     const bestSellingProducts = await getProductsByTag({ tag: 'best-seller' })
 
      return (
        <>
@@ -75,6 +76,16 @@
             <ProductSlider title={"Today's Deals"} products={todaysDeals} />
           </CardContent>
         </Card>
+
+           <Card className='w-full rounded-none'>
+       <CardContent className='p-4 items-center gap-3'>
+         <ProductSlider
+           title='Best Selling Products'
+           products={bestSellingProducts}
+           hideDetails
+         />
+       </CardContent>
+     </Card>
          </div>
        </>
      )
