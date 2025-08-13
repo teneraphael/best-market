@@ -6,7 +6,7 @@
    import { Card } from '@/components/ui/card'
    import { CardContent } from '@/components/ui/card'
    import ProductSlider from '@/components/shared/product/product-slider'
-
+   import BrowsingHistoryList from '@/components/shared/browsing-history-list'
    
 
 
@@ -87,6 +87,9 @@
        </CardContent>
      </Card>
          </div>
+          <div className='p-4 bg-background'>
+             <BrowsingHistoryList />
+          </div>
        </>
      )
    }
