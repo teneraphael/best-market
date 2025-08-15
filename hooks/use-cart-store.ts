@@ -100,7 +100,7 @@ const useCartStore = create(
         set({
           cart: {
             ...get().cart,
-            items: updatedCartItems, 
+              items: updatedCartItems, 
             ...(await calcDeliveryDateAndPrice({
               items: updatedCartItems,
               shippingAddress,
