@@ -9,6 +9,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { createOrder } from '@/lib/actions/order.actions'
+import { toast } from '@/hooks/use-toast'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -81,6 +83,7 @@ const CheckoutForm = () => {
     setShippingAddress,
     setPaymentMethod,
     updateItem,
+    clearCart,
     removeItem,
     setDeliveryDateIndex,
   } = useCartStore()
@@ -113,7 +116,32 @@ const CheckoutForm = () => {
     useState<boolean>(false)
 
   const handlePlaceOrder = async () => {
-    // TODO: place order
+    const res = await createOrder({
+      items,
+      shippingAddress,
+      expectedDeliveryDate: calculateFutureDate(
+        AVAILABLE_DELIVERY_DATES[deliveryDateIndex!].daysToDeliver
+      ),
+      deliveryDateIndex,
+      paymentMethod,
+      itemsPrice,
+      shippingPrice,
+      taxPrice,
+      totalPrice,
+    })
+    if (!res.success) {
+      toast({
+        description: res.message,
+        variant: 'destructive',
+      })
+    } else {
+      toast({
+        description: res.message,
+        variant: 'default',
+      })
+      clearCart()
+      router.push(`/checkout/${res.data?.orderId}`)
+    }
   }
   const handleSelectPaymentMethod = () => {
     setIsAddressSelected(true)
@@ -465,10 +493,10 @@ const CheckoutForm = () => {
           </div>
           {/* items and delivery date */}
           <div>
-            {isDeliveryDateSelected && deliveryDateIndex != undefined ? (
+            {isDeliveryDateSelected && deliveryDateIndex !== undefined ? (
               <div className='grid  grid-cols-1 md:grid-cols-12  my-3 pb-3'>
                 <div className='flex text-lg font-bold  col-span-5'>
-                  <span className='w-8'>3 </span>
+                  <span className='w-8'>3</span>
                   <span>Items and shipping</span>
                 </div>
                 <div className='col-span-5'>
@@ -477,11 +505,13 @@ const CheckoutForm = () => {
                     {
                       formatDateTime(
                         calculateFutureDate(
-                          AVAILABLE_DELIVERY_DATES[deliveryDateIndex]
-                            .daysToDeliver
+                          AVAILABLE_DELIVERY_DATES[deliveryDateIndex].daysToDeliver
+                            
                         )
+                        
                       ).dateOnly
                     }
+                    
                   </p>
                   <ul>
                     {items.map((item, _index) => (
@@ -517,8 +547,7 @@ const CheckoutForm = () => {
                         {
                           formatDateTime(
                             calculateFutureDate(
-                              AVAILABLE_DELIVERY_DATES[deliveryDateIndex!]
-                                .daysToDeliver
+                              AVAILABLE_DELIVERY_DATES[deliveryDateIndex!].daysToDeliver
                             )
                           ).dateOnly
                         }
