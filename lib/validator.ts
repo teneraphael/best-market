@@ -21,8 +21,7 @@ const Price = (field: string) =>
   isVerifiedPurchase: z.boolean(),
   title: z.string().min(1, 'Title is required'),
   comment: z.string().min(1, 'Comment is required'),
-  rating: z.coerce
-    .number()
+  rating: z.number()
     .int()
     .min(1, 'Rating must be at least 1')
     .max(5, 'Rating must be at most 5'),
