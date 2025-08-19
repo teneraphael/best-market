@@ -1,7 +1,7 @@
 'use server'
 import { signIn } from '@/auth'
-import { IUserSignIn } from '@/types'
-import { signOut } from '@/auth'
+import { IUserSignIn, IUserName } from '@/types'
+import { signOut, auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { formatError } from '../utils'
 import bcrypt from 'bcryptjs'
@@ -40,5 +40,24 @@ export async function registerUser(userSignUp: IUserSignUp) {
     return { success: true, message: 'User created successfully' }
   } catch (error) {
     return { success: false, error: formatError(error) }
+  }
+}
+
+// UPDATE
+export async function updateUserName(user: IUserName) {
+  try {
+    await connectToDatabase()
+    const session = await auth()
+    const currentUser = await User.findById(session?.user?.id)
+    if (!currentUser) throw new Error('User not found')
+    currentUser.name = user.name
+    const updatedUser = await currentUser.save()
+    return {
+      success: true,
+      message: 'User updated successfully',
+      data: JSON.parse(JSON.stringify(updatedUser)),
+    }
+  } catch (error) {
+    return { success: false, message: formatError(error) }
   }
 }
