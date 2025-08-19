@@ -50,7 +50,7 @@ export default async function ProductDetails(props: {
         productId: product._id,
         page: Number(page || '1'),
     })
- const session = await auth()
+    const session = await auth()
     return (
         <div>
             <AddToBrowsingHistory id={product._id} category={product.category} />
@@ -145,12 +145,12 @@ export default async function ProductDetails(props: {
                     </div>
                 </div>
             </section>
-              <section className='mt-10'>
-        <h2 className='h2-bold mb-2' id='reviews'>
-          Customer Reviews
-        </h2>
-        <ReviewList product={product} userId={session?.user.id} />
-      </section>
+            <section className='mt-10'>
+                <h2 className='h2-bold mb-2' id='reviews'>
+                    Customer Reviews
+                </h2>
+                <ReviewList product={product} userId={session?.user.id} />
+            </section>
             <section className='mt-10'>
                 <ProductSlider
                     products={relatedProducts.data}
