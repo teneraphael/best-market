@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ProductInputSchema } from '@/lib/validator'
 import { UserInputSchema } from '@/lib/validator'
 import { UserSignInSchema } from '@/lib/validator'
@@ -23,6 +24,7 @@ export type IReviewDetails = IReviewInput & {
 
 export type IProductInput = z.infer<typeof ProductInputSchema>
 export type Data = {
+  [x: string]: any
   users: IUserInput[]
   products: IProductInput[]
   reviews: {
@@ -42,7 +44,17 @@ export type Data = {
     isPublished: boolean
   }[]
 }
+
+// order
 export type IOrderInput = z.infer<typeof OrderInputSchema>
+export type IOrderList = IOrderInput & {
+  _id: string
+  user: {
+    name: string
+    email: string
+  }
+  createdAt: Date
+}
 export type OrderItem = z.infer<typeof OrderItemSchema>
 export type Cart = z.infer<typeof CartSchema>
 export type ShippingAddress = z.infer<typeof ShippingAddressSchema>
